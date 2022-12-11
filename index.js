@@ -55,5 +55,16 @@ app.delete('/api/persons/:id', (req, res) => {
   persons.filter((person) => person.id !== id)
   res.status(204).end()
 })
+
+// creating a contact
+app.post('/api/persons', (req, res) => {
+  let id = Math.floor(Math.random() * (10000000000 - 4))
+  let newContact = req.body
+  newContact.id = id
+
+  persons.concat(newContact)
+  res.json(newContact)
+})
+
 const port = 3001
 app.listen(port)

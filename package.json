@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/dilippoudel/backend-phonebook#readme",
   "dependencies": {
+    "body-parser": "^1.20.1",
     "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.20"
   }
 }

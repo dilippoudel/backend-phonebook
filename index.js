@@ -61,8 +61,20 @@ app.post('/api/persons', (req, res) => {
   let id = Math.floor(Math.random() * (10000000000 - 4))
   let newContact = req.body
   newContact.id = id
+  let isAlreadyExisted = persons.find((person) => person.name === req.body.name)
+  if (isAlreadyExisted) {
+    res.json({ error: 'name must be unique' }).end()
+  }
+  let { name } = req.body
+  let { number } = req.body
+  if (!name || !number) {
+    res.json({ error: 'name and number must be filled' }).end()
+  }
 
-  persons.concat(newContact)
+  if (name && number && !isAlreadyExisted) {
+    persons.concat(newContact)
+  }
+
   res.json(newContact)
 })
 

@@ -14,6 +14,7 @@ const contactSchema = new mongoose.Schema({
   phone_number: Number,
 })
 const Contact = mongoose.model('Contact', contactSchema)
+
 mongoose
   .connect(url)
   .then((result) => {
@@ -21,10 +22,13 @@ mongoose
       name: process.argv[3],
       phone_number: process.argv[4],
     })
-    return newContact.save()
+    newContact.save()
   })
-  .then(() => {
-    console.log('contact saved')
-    return mongoose.connection.close()
+  .then((result) => {
+    Contact.find({}).then((res) => {
+      res.forEach((item) => console.log(item))
+      mongoose.connection.close()
+    })
   })
+
   .catch((err) => console.log(err))

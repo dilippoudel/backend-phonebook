@@ -29,19 +29,22 @@ app.get('/info', (req, res) => {
 })
 
 // get all contacts
-app.get('/api/persons', (req, res) => {
-  Contact.find({}).then((person) => {
-    res.json(person)
-  })
+app.get('/api/persons', async (req, res) => {
+  try {
+    const allContacts = await Contact.find({})
+    return res.json(allContacts)
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
 })
 
 // getting single person info
 app.get('/api/persons/:id', async (req, res) => {
-  const contact = await Contact.findById(req.params.id)
-  if (contact) {
-    res.send(contact)
-  } else {
-    res.status(404).end()
+  try {
+    const person = await Contact.findById(req.params.id)
+    res.send(person)
+  } catch (error) {
+    res.status(404).json({ error: 'contact could not find in server' })
   }
 })
 
@@ -53,27 +56,35 @@ app.delete('/api/persons/:id', async (req, res) => {
 
 // creating a contact
 app.post('/api/persons', (req, res) => {
-  const body = req.body
-  if (body === undefined) {
-    return res.status(400).json({ error: 'content missing' })
+  try {
+    const body = req.body
+    if (body === undefined) {
+      return res.status(400).json({ error: 'content missing' })
+    }
+    const person = new Contact({
+      name: body.name,
+      number: body.number,
+    })
+    person.save().then((savedPerson) => res.json(savedPerson))
+  } catch (error) {
+    res.json({ error: 'somthing wrong' })
   }
-  const person = new Contact({
-    name: body.name,
-    number: body.number,
-  })
-  person.save().then((savedPerson) => res.json(savedPerson))
 })
 
 // updating the contact
 app.put('/api/persons/:id', async (req, res) => {
-  const newContact = Contact.findByIdAndUpdate(
-    req.params.id,
-    { $set: req.body },
-    (err) => {
-      if (err) return res.json({ error: 'Could not update, sth wrong' })
-      res.send('Contact updated')
-    },
-  )
+  try {
+    const newContact = Contact.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      (err) => {
+        if (err) return res.json({ error: 'Could not update, sth wrong' })
+        res.send('Contact updated')
+      },
+    )
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
 })
 
 const port = 3001

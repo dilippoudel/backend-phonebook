@@ -46,7 +46,6 @@ app.get('/api/persons/:id', async (req, res, next) => {
     res.send(person)
   } catch (error) {
     next(error)
-    // res.status(404).json({ error: 'contact could not find in server' })
   }
 })
 

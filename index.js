@@ -61,7 +61,7 @@ app.delete('/api/persons/:id', async (req, res, next) => {
 })
 
 // creating a contact
-app.post('/api/persons', (req, res, next) => {
+app.post('/api/persons', async (req, res, next) => {
   try {
     const body = req.body
     if (body === undefined) {
@@ -71,7 +71,7 @@ app.post('/api/persons', (req, res, next) => {
       name: body.name,
       number: body.number,
     })
-    person.save().then((savedPerson) => res.json(savedPerson))
+    await person.save().then((savedPerson) => res.json(savedPerson))
   } catch (error) {
     next(error)
   }

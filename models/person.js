@@ -16,7 +16,25 @@ const contactsSchema = new mongoose.Schema({
     minLength: 3,
     required: true,
   },
-  number: String,
+  number: {
+    minLength: 8,
+    type: String,
+    validate: {
+      validator: function (number) {
+        let splittedNumbers = number.split('-')
+        if (splittedNumbers.length > 0) {
+          if (
+            splittedNumbers[0].length == 2 ||
+            splittedNumbers[0].length == 3
+          ) {
+            return true
+          }
+        }
+        return false
+      },
+      message: 'Number should be 020-122222 or 09-0220200 format or 040222222',
+    },
+  },
 })
 contactsSchema.set('toJSON', {
   transform: (document, returnedObject) => {

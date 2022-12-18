@@ -10,7 +10,7 @@ app.use(express.static('build'))
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.json())
-morgan.token('body', (req, res) =>
+morgan.token('body', (req) =>
   JSON.stringify({ name: req.body.name, number: req.body.number }),
 )
 
@@ -21,25 +21,16 @@ app.use(
 app.get('/persons', (req, res) => {
   res.send('<h1>Everything is okey</h1>')
 })
-// getting info
-app.get('/info', (req, res) => {
-  res.send(`<p>Phonebook has info ${persons.length} people <br/>
-    ${new Date()}
-  </p>`)
-})
 
-// get all contacts
 app.get('/api/persons', async (req, res, next) => {
   try {
     const allContacts = await Contact.find({})
     return res.json(allContacts)
   } catch (error) {
     next(error)
-    // res.status(500).json({ error: 'Internal server error' })
   }
 })
 
-// getting single person info
 app.get('/api/persons/:id', async (req, res, next) => {
   try {
     const person = await Contact.findById(req.params.id)
@@ -59,7 +50,6 @@ app.delete('/api/persons/:id', async (req, res, next) => {
   }
 })
 
-// creating a contact
 app.post('/api/persons', async (req, res, next) => {
   try {
     const body = req.body
@@ -76,7 +66,6 @@ app.post('/api/persons', async (req, res, next) => {
   }
 })
 
-// updating the contact
 app.put('/api/persons/:id', async (req, res, next) => {
   try {
     const body = req.body
@@ -107,6 +96,7 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 app.use(errorHandler)
+// eslint-disable-next-line no-undef
 const port = process.env.PORT
 
 app.listen(port)

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+// eslint-disable-next-line no-undef
 const url = process.env.MONGODB_URI
 
 console.log('database is connecting')
@@ -6,7 +7,7 @@ mongoose.set('strictQuery', true)
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((err) => console.log('error is: ', err.message))
@@ -24,8 +25,8 @@ const contactsSchema = new mongoose.Schema({
         let splittedNumbers = number.split('-')
         if (splittedNumbers.length > 0) {
           if (
-            splittedNumbers[0].length == 2 ||
-            splittedNumbers[0].length == 3
+            splittedNumbers[0].length === 2 ||
+            splittedNumbers[0].length === 3
           ) {
             return true
           }

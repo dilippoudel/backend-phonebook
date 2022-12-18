@@ -11,7 +11,11 @@ mongoose
   })
   .catch((err) => console.log('error is: ', err.message))
 const contactsSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
   number: String,
 })
 contactsSchema.set('toJSON', {
